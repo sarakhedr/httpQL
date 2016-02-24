@@ -1,0 +1,444 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Usage &mdash; httpQL 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="httpQL 1.0 documentation" href="index.html"/>
+        <link rel="next" title="Javadoc" href="javadoc/packages.html"/>
+        <link rel="prev" title="httpQL Documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> httpQL
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exposing-fields">Exposing Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jersey-for-great-justice">Jersey For Great Justice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#handling-naughty-requests">Handling Naughty Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-query">Building The Query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#putting-it-together">Putting It Together</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-usage">Advanced Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#multi-value-parameters">Multi-value Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modifying-filters-manually">Modifying Filters Manually</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modifying-a-builtselect">Modifying a <code class="docutils literal"><span class="pre">BuiltSelect</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-field-naming">Custom Field Naming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#going-nuts">Going Nuts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="javadoc/packages.html">Appendix A: Complete Javadoc</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">httpQL</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Usage</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/usage.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>com.hubspot.httpql<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>httpql<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exposing-fields">
+<h2>Exposing Fields<a class="headerlink" href="#exposing-fields" title="Permalink to this headline">¶</a></h2>
+<p>Out of the box, <em>httpQL</em> doesn&#8217;t permit filtering by <em>anything</em>; we&#8217;ll
+need to use the <a class="reference internal" href="javadoc/com/hubspot/httpql/ann/FilterBy.html#com.hubspot.httpql.ann.FilterBy" title="com.hubspot.httpql.ann.FilterBy"><code class="xref java java-type docutils literal"><span class="pre">FilterBy</span></code></a>, <a class="reference internal" href="javadoc/com/hubspot/httpql/ann/OrderBy.html#com.hubspot.httpql.ann.OrderBy" title="com.hubspot.httpql.ann.OrderBy"><code class="xref java java-type docutils literal"><span class="pre">OrderBy</span></code></a>, and
+(optionally) <a class="reference internal" href="javadoc/com/hubspot/httpql/QueryConstraints.html#com.hubspot.httpql.QueryConstraints" title="com.hubspot.httpql.QueryConstraints"><code class="xref java java-type docutils literal"><span class="pre">QueryConstraints</span></code></a> annotations to tell it
+what&#8217;s allowed.</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="nd">@QueryConstraints</span><span class="o">(</span><span class="n">defaultLimit</span> <span class="o">=</span> <span class="mi">10</span><span class="o">,</span> <span class="n">maxLimit</span> <span class="o">=</span> <span class="mi">100</span><span class="o">,</span> <span class="n">maxOffset</span> <span class="o">=</span> <span class="mi">100</span><span class="o">)</span>
+<span class="kd">class</span> <span class="nc">Person</span> <span class="kd">implements</span> <span class="n">QuerySpec</span> <span class="o">{</span>
+
+   <span class="nd">@FilterBy</span><span class="o">(</span><span class="n">Equal</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+   <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+
+   <span class="nd">@FilterBy</span><span class="o">({</span><span class="n">Equal</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">GreaterThan</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
+   <span class="nd">@OrderBy</span>
+   <span class="n">Integer</span> <span class="n">age</span><span class="o">;</span>
+
+   <span class="kd">public</span> <span class="n">String</span> <span class="nf">tableName</span><span class="o">()</span> <span class="o">{</span>
+     <span class="k">return</span> <span class="s">&quot;person&quot;</span><span class="o">;</span>
+   <span class="o">}</span>
+
+   <span class="c1">// Getters/Setters elided</span>
+ <span class="o">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We&#8217;ll assume <code class="docutils literal"><span class="pre">Person</span></code> already existed and we&#8217;re using it internally
+for other things: binding data parameters, person-related logic,
+etc. We could just have easily written a new <code class="docutils literal"><span class="pre">PersonQuery</span></code> class; do
+whatever makes you happy.</p>
+</div>
+<p>In English, we&#8217;re saying:</p>
+<div class="line-block">
+<div class="line">Allow requests for people by name, by specific age, by age range, or by any combination of these. Additionally, allow responses ordered by age. Finally, limit the result set to 10 people by default with an upper bound of 100 matches and 200 matches total (<code class="docutils literal"><span class="pre">maxLimit</span></code> + <code class="docutils literal"><span class="pre">maxOffset</span></code>).</div>
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="jersey-for-great-justice">
+<h2>Jersey For Great Justice<a class="headerlink" href="#jersey-for-great-justice" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s expose our new query endpoint via Jersey:</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="nd">@GET</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/search&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="nf">searchPeople</span><span class="o">(</span><span class="nd">@BindQuery</span><span class="o">(</span><span class="n">Person</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="n">ParsedQuery</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">query</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// Until next time...</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>This snippet is all we need to process the request&#8217;s query parameters. What do we do after that? I guess you&#8217;ll have to keep reading...</p>
+</div>
+<div class="section" id="handling-naughty-requests">
+<h2>Handling Naughty Requests<a class="headerlink" href="#handling-naughty-requests" title="Permalink to this headline">¶</a></h2>
+<p>What happens if a request violates one of our rules above?</p>
+<ul class="simple">
+<li>If attempting to filter by a disallowed/missing <em>field</em>,
+<a class="reference internal" href="javadoc/com/hubspot/httpql/error/FilterViolation.html#com.hubspot.httpql.error.FilterViolation" title="com.hubspot.httpql.error.FilterViolation"><code class="xref java java-type docutils literal"><span class="pre">FilterViolation</span></code></a> is thrown.</li>
+<li>If attempting to use a disallowed/missing <em>filter</em>,
+<a class="reference internal" href="javadoc/com/hubspot/httpql/error/FilterViolation.html#com.hubspot.httpql.error.FilterViolation" title="com.hubspot.httpql.error.FilterViolation"><code class="xref java java-type docutils literal"><span class="pre">FilterViolation</span></code></a> is thrown.</li>
+<li>If constraints such as limit and offset are violated,
+<a class="reference internal" href="javadoc/com/hubspot/httpql/error/ConstraintViolation.html#com.hubspot.httpql.error.ConstraintViolation" title="com.hubspot.httpql.error.ConstraintViolation"><code class="xref java java-type docutils literal"><span class="pre">ConstraintViolation</span></code></a> is thrown.</li>
+</ul>
+<p>In each case, the exceptions provide human-readable error messages to
+help callers clean up their act. You can find all the possible error
+cases along with descriptions of where they&#8217;re used in
+<a class="reference internal" href="javadoc/com/hubspot/httpql/error/package-index.html#com.hubspot.httpql.error" title="com.hubspot.httpql.error"><code class="xref java java-package docutils literal"><span class="pre">httpql.error</span></code></a>.</p>
+<p>If you don&#8217;t want these error messages (potentially) returned in the
+response, you&#8217;ll want to implement <code class="docutils literal"><span class="pre">ExceptionMapper</span></code>.</p>
+</div>
+<div class="section" id="building-the-query">
+<h2>Building The Query<a class="headerlink" href="#building-the-query" title="Permalink to this headline">¶</a></h2>
+<p>Back to our Resource method: what do we <em>do</em> with this
+<a class="reference internal" href="javadoc/com/hubspot/httpql/ParsedQuery.html#com.hubspot.httpql.ParsedQuery" title="com.hubspot.httpql.ParsedQuery"><code class="xref java java-type docutils literal"><span class="pre">ParsedQuery</span></code></a> thing?</p>
+<p>We can customize the bound values if we want to confuse the requestor
+(or for a better reason):</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">Person</span> <span class="n">p</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">getBoundQuery</span><span class="o">();</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">getAge</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">21</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// Bar crawl!</span>
+  <span class="n">p</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">21</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Once we&#8217;re satisfied, we can make a <a class="reference internal" href="javadoc/com/hubspot/httpql/impl/SelectBuilder.html#com.hubspot.httpql.impl.SelectBuilder" title="com.hubspot.httpql.impl.SelectBuilder"><code class="xref java java-type docutils literal"><span class="pre">SelectBuilder</span></code></a>:</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">SelectBuilder</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">selectBuilder</span> <span class="o">=</span> <span class="n">SelectBuilder</span><span class="o">.</span><span class="na">forParsedQuery</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference internal" href="javadoc/com/hubspot/httpql/impl/SelectBuilder.html#com.hubspot.httpql.impl.SelectBuilder.forParsedQuery(ParsedQuery)" title="com.hubspot.httpql.impl.SelectBuilder.forParsedQuery(ParsedQuery)"><code class="xref java java-meth docutils literal"><span class="pre">SelectBuilder.forParsedQuery(ParsedQuery,</span> <span class="pre">MetaQuerySpec)</span></code></a>
+is a more advanced, customized method of creating builders.</p>
+</div>
+<p>Like most builders it has various methods (prefixed by &#8220;with&#8221;) used to
+control the resulting query; you can specify fields to select, build a
+count instead of a normal query, change how parameters are bound,
+etc. For this example, we&#8217;re just going to build the default query,
+though:</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">BuiltSelect</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">select</span> <span class="o">=</span> <span class="n">selectBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+<span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>  <span class="c1">// select * from person where `age` &gt; 21 ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="putting-it-together">
+<h2>Putting It Together<a class="headerlink" href="#putting-it-together" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s look at the final Resource, assuming we&#8217;re using <a class="reference external" href="http://jdbi.org/">JDBI</a> as our
+database interface.</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="nd">@GET</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/search&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="nf">searchPeople</span><span class="o">(</span><span class="nd">@BindQuery</span><span class="o">(</span><span class="n">Person</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="n">ParsedQuery</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">query</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">SelectBuilder</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">selectBuilder</span> <span class="o">=</span> <span class="n">SelectBuilder</span><span class="o">.</span><span class="na">forParsedQuery</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+  <span class="n">BuiltSelect</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">select</span> <span class="o">=</span> <span class="n">selectBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+  <span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>  <span class="c1">// select * from person where `age` &gt; 21 ...</span>
+  <span class="k">return</span> <span class="n">personDAO</span><span class="o">.</span><span class="na">getHandle</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="n">sql</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">RosettaResultSetMapperFactory</span><span class="o">.</span><span class="na">mapperFor</span><span class="o">(</span><span class="n">Person</span><span class="o">.</span><span class="na">class</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">list</span><span class="o">();</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Voila: a flexible, safe people-searching endpoint in four lines of code!</p>
+</div>
+<div class="section" id="advanced-usage">
+<h2>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="multi-value-parameters">
+<h3>Multi-value Parameters<a class="headerlink" href="#multi-value-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Certain condition operators (aka Filters) require multiple values. For
+instance, the <code class="docutils literal"><span class="pre">IN</span></code> operator takes a list of possible matches. For
+cases such as these, we&#8217;ll need to add the appropriately-typed fields
+to our <a class="reference internal" href="javadoc/com/hubspot/httpql/QuerySpec.html#com.hubspot.httpql.QuerySpec" title="com.hubspot.httpql.QuerySpec"><code class="xref java java-type docutils literal"><span class="pre">QuerySpec</span></code></a>:</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="c1">// class Person ... {</span>
+
+<span class="nd">@FilterBy</span><span class="o">(</span><span class="n">In</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">as</span><span class="o">=</span><span class="s">&quot;age&quot;</span><span class="o">)</span>
+<span class="nd">@JsonView</span><span class="o">(</span><span class="n">HTTPQLView</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="n">Collection</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">ages</span><span class="o">;</span>
+</pre></div>
+</div>
+<p>We need a field to hold our collection of possible ages, but there&#8217;s
+no such <code class="docutils literal"><span class="pre">ages</span></code> column in the database; we use the <code class="docutils literal"><span class="pre">as</span></code> parameter
+to make sure the condition goes against the correct field.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">JsonView</span></code> annotation is not mandatory, but is encouraged
+when using <em>httpQL</em> annotations on a type that may also be
+serialized as output. Since <code class="docutils literal"><span class="pre">ages</span></code> isn&#8217;t an actual column it&#8217;s
+probably not something you want exposed in a JSON response, even as
+a null value.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Using <code class="docutils literal"><span class="pre">&#64;JsonIgnore</span></code> on properties such as these will also hide
+them from <em>httpQL</em>!</p>
+</div>
+</div>
+<div class="section" id="modifying-filters-manually">
+<h3>Modifying Filters Manually<a class="headerlink" href="#modifying-filters-manually" title="Permalink to this headline">¶</a></h3>
+<p>You can add your own filters (for global conditions, etc.) to an
+already-parsed query.</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">(!</span> <span class="n">query</span><span class="o">.</span><span class="na">hasFilter</span><span class="o">(</span><span class="s">&quot;age&quot;</span><span class="o">))</span> <span class="o">{</span>
+  <span class="n">query</span><span class="o">.</span><span class="na">addFilter</span><span class="o">(</span><span class="s">&quot;age&quot;</span><span class="o">,</span> <span class="n">GreaterThan</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="mi">15</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="k">assert</span> <span class="n">query</span><span class="o">.</span><span class="na">hasFilter</span><span class="o">(</span><span class="s">&quot;age&quot;</span><span class="o">);</span>
+<span class="k">assert</span> <span class="n">query</span><span class="o">.</span><span class="na">getBoundQuery</span><span class="o">().</span><span class="na">getAge</span><span class="o">()</span> <span class="o">==</span> <span class="mi">15</span>
+
+<span class="c1">// Replace zero or more &quot;name&quot;-related filters with this one</span>
+<span class="n">query</span><span class="o">.</span><span class="na">addFilterExclusively</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="n">Equal</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">&quot;bob&quot;</span><span class="o">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>There&#8217;s an important distinction between a condition&#8217;s <em>value</em> and
+its <em>existence</em> in the list of active filters. In the above
+example, if we called <code class="docutils literal"><span class="pre">query.getBoundQuery().setAge(15)</span></code> <em>instead
+of</em> adding the <em>Greater Than</em> filter via
+<a class="reference internal" href="javadoc/com/hubspot/httpql/ParsedQuery.html#com.hubspot.httpql.ParsedQuery.addFilter(String, Class, Object)" title="com.hubspot.httpql.ParsedQuery.addFilter(String, Class, Object)"><code class="xref java java-meth docutils literal"><span class="pre">ParsedQuery.addFilter</span></code></a>, we would have indeed <em>set</em> the
+age value but, <strong>it would not have been used!</strong></p>
+<p class="last">Logically this makes sense: merely binding a value doesn&#8217;t add it
+as a condition. Because of the potential for confusion, we
+recommend using <a class="reference internal" href="javadoc/com/hubspot/httpql/ParsedQuery.html#com.hubspot.httpql.ParsedQuery.addFilter(String, Class, Object)" title="com.hubspot.httpql.ParsedQuery.addFilter(String, Class, Object)"><code class="xref java java-meth docutils literal"><span class="pre">ParsedQuery.addFilter</span></code></a> or
+<a class="reference internal" href="javadoc/com/hubspot/httpql/ParsedQuery.html#com.hubspot.httpql.ParsedQuery.addFilterExclusively(String, Class, Object)" title="com.hubspot.httpql.ParsedQuery.addFilterExclusively(String, Class, Object)"><code class="xref java java-meth docutils literal"><span class="pre">ParsedQuery.addFilterExclusively</span></code></a> in place of simply
+binding values, except in cases where you are <em>certain</em> a condition
+exists (or will exist) for that field.</p>
+</div>
+</div>
+<div class="section" id="modifying-a-builtselect">
+<h3>Modifying a <code class="docutils literal"><span class="pre">BuiltSelect</span></code><a class="headerlink" href="#modifying-a-builtselect" title="Permalink to this headline">¶</a></h3>
+<p><em>httpQL</em> exposes queries for mutation all the way up to the final
+string generation process. With a little familiarity with <a class="reference external" href="http://www.jooq.org/">JOOQ</a>, you
+can modify a query even after its been built:</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">BuiltSelect</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">built</span> <span class="o">=</span> <span class="n">selectBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+<span class="o">(</span><span class="n">SelectConditionStep</span><span class="o">&lt;?&gt;)</span> <span class="n">select</span> <span class="o">=</span> <span class="n">built</span><span class="o">.</span><span class="na">getRawSelect</span><span class="o">();</span>
+<span class="n">select</span><span class="o">.</span><span class="na">and</span><span class="o">(</span><span class="s">&quot;secret = false&quot;</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">query</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="c1">// select * from person where ... and secret = false ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-field-naming">
+<h3>Custom Field Naming<a class="headerlink" href="#custom-field-naming" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="javadoc/com/hubspot/httpql/FieldFactory.html#com.hubspot.httpql.FieldFactory" title="com.hubspot.httpql.FieldFactory"><code class="xref java java-type docutils literal"><span class="pre">FieldFactory</span></code></a> interface can be used to customize how
+fields are represented in queries to, for instance, use aliases
+(<code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">id</span> <span class="pre">as</span> <span class="pre">`foo.id`</span> <span class="pre">...</span></code>) or table prefixes (<code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">`tbl`.`id`</span>
+<span class="pre">from</span> <span class="pre">tbl</span> <span class="pre">...</span></code>):</p>
+<div class="highlight-java"><div class="highlight"><pre><span></span><span class="n">SelectBuilder</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">selectBuilder</span> <span class="o">=</span> <span class="n">SelectBuilder</span><span class="o">.</span><span class="na">forParsedQuery</span><span class="o">(</span><span class="n">query</span><span class="o">)</span>
+  <span class="o">.</span><span class="na">withFieldFactory</span><span class="o">(</span><span class="k">new</span> <span class="n">PrefixingAliasFieldFactory</span><span class="o">(</span><span class="s">&quot;foo.&quot;</span><span class="o">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="going-nuts">
+<h3>Going Nuts<a class="headerlink" href="#going-nuts" title="Permalink to this headline">¶</a></h3>
+<p>Want to allow filtering on every field that <em>doesn&#8217;t</em> have an
+annotation instead? Of course not, but you <em>could</em>!</p>
+<p>Most of the logic around how things get created and interpreted by
+<em>httpQL</em> is centralized in <a class="reference internal" href="javadoc/com/hubspot/httpql/MetaQuerySpec.html#com.hubspot.httpql.MetaQuerySpec" title="com.hubspot.httpql.MetaQuerySpec"><code class="xref java java-type docutils literal"><span class="pre">MetaQuerySpec</span></code></a>. While the
+default implementation should be sufficient in 99.9% of cases, it is
+possible to extend it and/or wholesale implement your own crazy
+logic.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="javadoc/packages.html" class="btn btn-neutral float-right" title="Javadoc" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="httpQL Documentation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, HubSpot Inc.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
